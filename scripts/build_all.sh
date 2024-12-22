@@ -18,5 +18,5 @@ done
 
 
 mkdir output
-find .. -iname "*.so" -exec cp -v {} output \;
+find .. -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
 
