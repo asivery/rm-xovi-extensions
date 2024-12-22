@@ -53,6 +53,7 @@ If your device updates, or you're installing qt-resource-rebuilder for the first
 ```
 mkdir -p /home/root/xovi/exthome/qt-resource-rebuilder
 rm -f /home/root/xovi/exthome/qt-resource-rebuilder/hashtab
+systemctl stop xochitl
 killall xochitl
 QMLDIFF_HASHTAB_CREATE=/home/root/xovi/exthome/qt-resource-rebuilder/hashtab xovi/_start
 ```
