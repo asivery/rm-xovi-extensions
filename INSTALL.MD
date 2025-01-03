@@ -7,40 +7,12 @@ You are installing this at your own risk.
 XOVI is a tethered extension manager - after a restart, the tablet will get back to the stock OS. To get XOVI back, simply run `xovi/start` from the SSH prompt. Your tablet will restart, and you will get XOVI back.
 
 ## To install XOVI:
-- Download [this](https://github.com/asivery/xovi/releases/latest/download/xovi.so) file
-- You need the `screen` binary on your device
-- Over SSH, create the following directory structure:
+- Download [install_allmerged.sh](https://raw.githubusercontent.com/asivery/rmpp-xovi-extensions/refs/heads/master/scripts/install_allmerged.sh)
+- Copy `install_allmerged.sh` over to the device, into `/tmp/`:
 ```
-/home/root
-    |
-    \->xovi
-       |
-       |->extensions.d
-       |
-       |->exthome
-       |
-       \->xovi.so (copy the file here)
+scp install_allmerged.sh root@10.11.99.1:/tmp
 ```
-- Run the following commands (copy and paste into SSH shell):
-```
-echo "#!/bin/bash" > /home/root/xovi/_start
-echo "#!/bin/bash" > /home/root/xovi/start
-echo "systemctl stop xochitl; killall xochitl 2>/dev/null; screen -dm bash -c '/home/root/xovi/_start'" >> /home/root/xovi/start
-echo "QML_DISABLE_DISK_CACHE=1 LD_PRELOAD=/home/root/xovi/xovi.so xochitl" >> /home/root/xovi/_start
-chmod a+x /home/root/xovi/{_start,start}
-
-mkdir -p /etc/systemd/system/xochitl.service.d
-
-cat <<"EOF" > /etc/systemd/system/xochitl.service.d/xovi.conf
-[Service]
-Environment="QML_DISABLE_DISK_CACHE=1"
-Environment="LD_PRELOAD=/home/root/xovi/xovi.so"
-EOF
-
-systemctl daemon-reload
-systemctl restart xochitl
-```
-This will override the `xochitl` service to load `xovi.so` on startup, and also creates a `_start` and `start` file for easier debugging.
+- Start the install script over SSH - on the device run: `chmod a+x /tmp/install_allmerged.sh && /tmp/install_allmerged.sh`
 
 ## To install extensions:
 - Before installing an extension, read its readme to make sure you also installed all of its dependencies. An extension without dependencies will either fail to load, or crash on startup.

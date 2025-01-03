@@ -7,7 +7,8 @@ mkdir -p $XOVI_INSTALL_DIR/{exthome,extensions.d}
 
 cat << EOF > $XOVI_INSTALL_DIR/debug
 #!/bin/bash
-QML_DISABLE_DISK_CACHE=1 LD_PRELOAD=/home/root/xovi/xovi.so xochitl
+systemctl stop xochitl
+QML_DISABLE_DISK_CACHE=1 QML_XHR_ALLOW_FILE_READ=1 QML_XHR_ALLOW_FILE_WRITE=1 LD_PRELOAD=/home/root/xovi/xovi.so xochitl
 EOF
 
 cat << EOF > $XOVI_INSTALL_DIR/start
@@ -15,6 +16,8 @@ mkdir -p /etc/systemd/system/xochitl.service.d
 cat << END > /etc/systemd/system/xochitl.service.d/xovi.conf
 [Service]
 Environment="QML_DISABLE_DISK_CACHE=1"
+Environment="QML_XHR_ALLOW_FILE_WRITE=1"
+Environment="QML_XHR_ALLOW_FILE_READ=1"
 Environment="LD_PRELOAD=/home/root/xovi/xovi.so"
 END
 
@@ -41,6 +44,7 @@ echo "Downloading xovi..."
 echo "You're all set!"
 cd "$HOME"
 echo "Enter 'xovi/start' to start xovi!"
+echo "To go back to stock either reboot, or run 'xovi/stock'"
 exit 0
 
 __PAYLOAD__
