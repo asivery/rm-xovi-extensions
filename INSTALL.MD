@@ -27,7 +27,7 @@ mkdir -p /home/root/xovi/exthome/qt-resource-rebuilder
 rm -f /home/root/xovi/exthome/qt-resource-rebuilder/hashtab
 systemctl stop xochitl
 killall xochitl
-QMLDIFF_HASHTAB_CREATE=/home/root/xovi/exthome/qt-resource-rebuilder/hashtab xovi/_start
+QMLDIFF_HASHTAB_CREATE=/home/root/xovi/exthome/qt-resource-rebuilder/hashtab xovi/debug
 ```
 After that, you should start seeing logs scroll up your screen. Enter your passcode on the rM, then watch the logs. When you see the line:
 ```
