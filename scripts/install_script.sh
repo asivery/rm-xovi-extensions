@@ -40,6 +40,9 @@ if [[ ! -e '/home/root/xovi/extensions.d/qt-resource-rebuilder.so' ]]; then
     exit 1
 fi
 
+# Create qt-resource-rebuilder folder
+mkidr $XOVI_INSTALL_DIR/exthome/qt-resource-rebuilder
+
 # stop systemwide gui process
 systemctl stop xochitl.service
 
