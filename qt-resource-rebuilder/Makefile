@@ -6,6 +6,8 @@ VPATH = src
 name = qt-resource-rebuilder
 ifeq ($(OECORE_TARGET_ARCH), aarch64)
 CARGO_BUILD_TARGET=aarch64-unknown-linux-gnu
+else ifeq ($(OECORE_TARGET_ARCH), arm)
+CARGO_BUILD_TARGET=armv7-unknown-linux-gnueabihf
 else
 $(error Bad build target. Source the toolchain environment)
 endif
