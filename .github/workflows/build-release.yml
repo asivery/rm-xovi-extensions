@@ -20,16 +20,15 @@ jobs:
 
             - name: Build Application
               run: |
-                mkdir ~/Tools
                 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > install
                 sh install -y
                 . "$HOME/.cargo/env"
                 rustup target add aarch64-unknown-linux-gnu
                 apt-get update
                 apt-get install -y zip
-                ln -rs /opt/codex/ferrari/* ~/Tools/remarkable-toolchain
-                cd scripts
-                bash build_all.sh
+                make
+                mkdir output
+                find .. -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
                 cd output
                 zip ../extensions.zip *
 
@@ -50,6 +49,6 @@ jobs:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
                 upload_url: ${{ steps.create_release.outputs.upload_url }}
-                asset_path: scripts/extensions.zip
-                asset_name: extensions.zip
+                asset_path: extensions.zip
+                asset_name: extensions_aarch64.zip
                 asset_content_type: application/octet-stream

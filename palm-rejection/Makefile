@@ -11,7 +11,7 @@ fileman : $(objects)
 xovi.c xovi.h	&: $(name).xovi
 	python3 ${XOVI_REPO}/util/xovigen.py -o xovi.c -H xovi.h $(name).xovi
 
-Main.o		: xovi.h fileman.h ../system.h ../util.h
+Main.o		: xovi.h fileman.h ../util.h
 HalManager.o	: xovi.h files.h ../util.h fileman.h
 TouchPipe.o	: xovi.h files.h ../util.h
 

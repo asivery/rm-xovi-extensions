@@ -2,14 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include "../../system.h"
 #include "../../util.h"
 #include "../../fileman/src/fileman.h"
 #include "../xovi.h"
 
 #define NAME "random-suspend-screen"
 
-REQUIRE_ENVIRONMENT;
 
 static const char *ENV_ROOT;
 static char *filenameBuffer;

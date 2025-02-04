@@ -24,7 +24,7 @@ xovi.c xovi.h	&: $(name).xovi
 
 main.o		: xovi.h types.h indexfile.h qmldiff.h ../util.h
 hash.o		: hash.h
-indexfile.o	: xovi.h rccload.h ../util.h ../system.h
+indexfile.o	: xovi.h rccload.h ../util.h
 
 
 .PHONY  : clean

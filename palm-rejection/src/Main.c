@@ -1,11 +1,9 @@
 #include <stdbool.h>
 
-#include "../../system.h"
 #include "../../fileman/src/fileman.h"
 #include "../../util.h"
 #include "../xovi.h"
 
-REQUIRE_ENVIRONMENT;
 
 volatile bool touchScreenDisabled = false;
 // TODO:
