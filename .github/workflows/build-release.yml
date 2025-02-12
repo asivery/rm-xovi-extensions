@@ -1,58 +1,92 @@
 name: Build with RMPP Toolchain and Upload Releases
 
 on:
-    push:
-        tags:
-          - '*'
+  push:
+    tags:
+      - '*'
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    strategy:
+      matrix:
+        os: ["eeems/remarkable-toolchain:latest-rmpp", "eeems/remarkable-toolchain:latest-rm2"]
+        include:
+          - os: "eeems/remarkable-toolchain:latest-rmpp"
+            arch: aarch64-unknown-linux-gnu
+            zip_name: extensions-aarch64.zip
+          - os: "eeems/remarkable-toolchain:latest-rm2"
+            arch: armv7-unknown-linux-gnueabihf
+            zip_name: extensions-arm32-testing.zip
+    runs-on: ubuntu-latest
 
-        container:
-            image: eeems/remarkable-toolchain:latest-rmpp
+    container:
+        image: ${{ matrix.os }}
 
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v3
-              with:
-                submodules: true
+    steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+          with:
+            submodules: true
 
-            - name: Build Application
-              run: |
-                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > install
-                sh install -y
-                . "$HOME/.cargo/env"
-                rustup target add aarch64-unknown-linux-gnu
-                apt-get update
-                apt-get install -y zip
-                export XOVI_REPO=/tmp/xovi
-                mkdir -p /tmp/xovi/util
-                curl -o "$XOVI_REPO/util/xovigen.py" https://raw.githubusercontent.com/asivery/xovi/refs/heads/master/util/xovigen.py
-                . /opt/codex/ferrari/*/environment-setup-cortexa53-crypto-remarkable-linux
-                make
-                mkdir output
-                find .. -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
-                cd output
-                zip ../extensions.zip *
+        - name: Build Application
+          run: |
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > install
+            sh install -y
+            . "$HOME/.cargo/env"
+            rustup target add ${{ matrix.arch }}
+            apt-get update
+            apt-get install -y zip
+            export XOVI_REPO=/tmp/xovi
+            git clone https://github.com/asivery/xovi $XOVI_REPO
+            . /opt/codex/*/*/environment-setup-*
+            make
+            mkdir output
+            find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
+            cd output
+            zip ../${{ matrix.zip_name }} *
 
-            - name: Create Release
-              uses: actions/create-release@v1
-              id: create_release
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                draft: false
-                prerelease: false
-                release_name: ${{ github.event.release.tag_name }}
-                tag_name: ${{ github.ref }}
+        - name: Upload Build Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: ${{ matrix.zip_name }}
+            path: ${{ matrix.zip_name }}
 
-            - name: Upload Release Asset
-              uses: actions/upload-release-asset@v1
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                upload_url: ${{ steps.create_release.outputs.upload_url }}
-                asset_path: extensions.zip
-                asset_name: extensions_aarch64.zip
-                asset_content_type: application/octet-stream
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+        - name: Download Build Artifacts
+          uses: actions/download-artifact@v4
+          with:
+            path: ./
+
+        - name: Create Release
+          uses: actions/create-release@v1
+          id: create_release_step
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            draft: false
+            prerelease: false
+            release_name: ${{ github.event.release.tag_name }}
+            tag_name: ${{ github.ref }}
+
+        - name: Upload Release Assets
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ steps.create_release_step.outputs.upload_url }}
+            asset_path: extensions-aarch64.zip/extensions-aarch64.zip
+            asset_name: extensions-aarch64.zip
+            asset_content_type: application/octet-stream
+
+        - name: Upload Release Assets (ARM32)
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ steps.create_release_step.outputs.upload_url }}
+            asset_path: extensions-arm32-testing.zip/extensions-arm32-testing.zip
+            asset_name: extensions-arm32-testing.zip
+            asset_content_type: application/octet-stream
