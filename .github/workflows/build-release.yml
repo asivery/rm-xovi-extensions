@@ -14,9 +14,11 @@ jobs:
           - os: "eeems/remarkable-toolchain:latest-rmpp"
             arch: aarch64-unknown-linux-gnu
             zip_name: extensions-aarch64.zip
+            dlfile_url: "https://github.com/asivery/dlfile/releases/latest/download/dlfile-aarch64"
           - os: "eeems/remarkable-toolchain:latest-rm2"
             arch: armv7-unknown-linux-gnueabihf
             zip_name: extensions-arm32-testing.zip
+            dlfile_url: "https://github.com/asivery/dlfile/releases/latest/download/dlfile-armv7hf"
     runs-on: ubuntu-latest
 
     container:
@@ -35,13 +37,17 @@ jobs:
             . "$HOME/.cargo/env"
             rustup target add ${{ matrix.arch }}
             apt-get update
-            apt-get install -y zip
+            apt-get install -y zip curl
             export XOVI_REPO=/tmp/xovi
             git clone https://github.com/asivery/xovi $XOVI_REPO
             . /opt/codex/*/*/environment-setup-*
             make
             mkdir output
             find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
+            curl -Lo dlfile ${{ matrix.dlfile_url }}
+            gzip dlfile
+            cat scripts/install_script.sh dlfile.gz > output/install
+            chmod a+x output/install
             cd output
             zip ../${{ matrix.zip_name }} *
 

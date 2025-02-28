@@ -84,13 +84,18 @@ systemctl start xochitl.service
 EOF
 
 echo "Extracting dlfile..."
-cd $XOVI_INSTALL_DIR
 PAYLOAD_LINE=$(awk '/^__PAYLOAD__/ { print NR + 1; exit 0; }' $0)
-tail -n +$PAYLOAD_LINE $0 | gzip -d > dlfile
+tail -n +$PAYLOAD_LINE $0 | gzip -d > $XOVI_INSTALL_DIR/dlfile
+cd $XOVI_INSTALL_DIR
 chmod a+x dlfile start debug stock rebuild_hashtable
 
 echo "Downloading xovi..."
-./dlfile "https://github.com/asivery/xovi/releases/latest/download/xovi.so"
+if [[ $(uname -m) == "aarch64" ]]; then
+    XOVI_FILE="xovi-aarch64.so"
+else
+    XOVI_FILE="xovi-arm32.so"
+fi
+./dlfile "https://github.com/asivery/xovi/releases/latest/download/$XOVI_FILE" xovi.so
 
 echo "You're all set!"
 cd "$HOME"
