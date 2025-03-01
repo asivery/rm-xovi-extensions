@@ -46,8 +46,8 @@ jobs:
             find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
             curl -Lo dlfile ${{ matrix.dlfile_url }}
             gzip dlfile
-            cat scripts/install_script.sh dlfile.gz > output/install
-            chmod a+x output/install
+            cat scripts/install_script.sh dlfile.gz > output/install-xovi-for-rm
+            chmod a+x output/install-xovi-for-rm
             cd output
             zip ../${{ matrix.zip_name }} *
 
