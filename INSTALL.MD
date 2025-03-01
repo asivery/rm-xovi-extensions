@@ -6,19 +6,21 @@ You are installing this at your own risk.
 
 XOVI is a tethered extension manager - after a restart, the tablet will get back to the stock OS. To get XOVI back, simply run `xovi/start` from the SSH prompt. Your tablet will restart, and you will get XOVI back.
 
+Please do not attempt to get xovi running on an encrypted tablet untethered by editing the xochitl systemd files in the root partition!! You WILL end up with a bootlooping device, and have to go through manual recovery.
+
 ## To install XOVI:
-- Download [install_allmerged.sh](https://raw.githubusercontent.com/asivery/rmpp-xovi-extensions/refs/heads/master/scripts/install_allmerged.sh)
-- Copy `install_allmerged.sh` over to the device, into `/tmp/`:
+- Download [the extensions zip for your device](https://github.com/asivery/rmpp-xovi-extensions/releases)
+- Copy `install` over from the archive to the device, into `/tmp/`:
 ```
-scp install_allmerged.sh root@10.11.99.1:/tmp
+scp install root@10.11.99.1:/tmp/
 ```
-- Start the install script over SSH - on the device run: `chmod a+x /tmp/install_allmerged.sh && /tmp/install_allmerged.sh`
+- Start the install script over SSH - on the device run: `chmod a+x /tmp/install && /tmp/install`
 
 Installing XOVI won't install any extensions. You need to choose what extensions you might need, and install them manually.
 
 ## To install extensions:
 - Before installing an extension, read its readme to make sure you also installed all of its dependencies. An extension without dependencies will either fail to load, or crash on startup.
-- Download an extension's `.so` file (in case of this repository, [download the `extensions.zip` file](https://github.com/asivery/rmpp-xovi-extensions/releases/), then unpack it to get all the currently available xovi extensions)
+- Download an extension's `.so` file (in case of this repository, [from the `extensions.zip` file](https://github.com/asivery/rmpp-xovi-extensions/releases/), then unpack it to get all the currently available xovi extensions)
 - Copy the `.so` file to `/home/root/xovi/extensions.d/` on the tablet
 - Run `systemctl restart xochitl` to restart xovi
 
