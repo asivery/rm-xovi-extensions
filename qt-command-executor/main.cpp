@@ -21,3 +21,5 @@ extern "C" char _xovi_shouldLoad() {
 }
 
 extern "C" __attribute__((section(".xovi_info"))) const int EXTENSIONVERSION = 0x00000100;
+__attribute__((section(".xovi"))) const char *LINKTABLENAMES = "Ephony\0\0";
+__attribute__((section(".xovi"))) const void *LINKTABLEVALUES[] = { (void *) 1, (void *) 0 };
