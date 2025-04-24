@@ -1,7 +1,7 @@
 # Define the project name
 TEMPLATE = lib
 TARGET = qt-command-executor
-CONFIG += shared
+CONFIG += shared plugin no_plugin_name_prefix
 
 # Define the Qt modules required
 QT += quick qml
