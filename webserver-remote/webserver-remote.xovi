@@ -1,0 +1,25 @@
+version 0.1.0
+
+import? _ZN17QNetworkInterface17interfaceFromNameERK7QString>QNetworkInterface
+import? _ZN10QTcpServer6listenERK12QHostAddresst
+import? _ZNK12QHostAddress8isGlobalEv>bool
+import qt-resource-rebuilder$qmldiff_add_external_diff
+import xovi-message-broker$broadcast
+
+override _ZN17QNetworkInterface17interfaceFromNameERK7QString
+override _ZNK12QHostAddress8isGlobalEv
+override _ZN10QTcpServer6listenERK12QHostAddresst
+
+export add_blocked
+with
+    xovi-message-broker$version = 1
+    xovi-message-broker$simpleSignal = "webserver-remote$banAddress"
+end
+
+export add_allowed
+with
+    xovi-message-broker$version = 1
+    xovi-message-broker$simpleSignal = "webserver-remote$allowAddress"
+end
+
+resource notification:notification.qmd

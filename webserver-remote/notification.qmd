@@ -1,0 +1,115 @@
+AFFECT [[2328484894988065446]]
+    IMPORT net.asivery.XoviMessageBroker 1.0
+    TRAVERSE [[8397788359424131273]] > [[8397993708429497603]]#[[7713531976371484]]
+        LOCATE BEFORE [[254504370080162629]]#[[988484618983443788]]
+        INSERT {
+            XoviMessageBroker {
+                id: xoviWebServerBroker
+                listeningFor: ["webserver-remote$newIP"]
+                onSignalReceived: (signal, message) => {
+                    httpConnectionDialog.ip = message;
+                    httpConnectionDialog.visible = true;
+                }
+            }
+
+            Rectangle {
+                id: httpConnectionDialog
+                property string ip: ""
+
+                width: 500
+                height: 250
+
+                anchors.top: parent.top
+                anchors.right: parent.right
+                anchors.margins: 20
+
+                border.width: 3
+                border.color: "black"
+                visible: false
+
+                Text {
+                    width: 500
+                    height: 175
+
+                    anchors.top: parent.top
+
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+
+                    font.pointSize: 25
+
+                    text: `Accept connection from ${httpConnectionDialog.ip}?`
+                }
+
+                Rectangle {
+                    width: 200
+                    height: 75
+
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.margins: 20
+
+                    border.width: 3
+                    border.color: "black"
+
+                    Text {
+                        anchors.fill: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pointSize: 20
+
+                        text: "Ignore"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: () => {
+                            httpConnectionDialog.visible = false;
+                        }
+
+                        onPressAndHold: () => {
+                            xoviWebServerBroker.sendSimpleSignal(
+                                "webserver-remote$banAddress",
+                                httpConnectionDialog.ip
+                            );
+                            httpConnectionDialog.visible = false;
+                        }
+                    }
+                }
+                Rectangle {
+                    width: 200
+                    height: 75
+
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    anchors.margins: 20
+
+                    border.width: 3
+                    border.color: "black"
+
+                    Text {
+                        anchors.fill: parent
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        font.pointSize: 20
+
+                        text: "Accept"
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: () => {
+                            xoviWebServerBroker.sendSimpleSignal(
+                                "webserver-remote$allowAddress",
+                                httpConnectionDialog.ip
+                            );
+                            httpConnectionDialog.visible = false;
+                        }
+                    }
+                }
+            }
+        }
+    END TRAVERSE
+END AFFECT
