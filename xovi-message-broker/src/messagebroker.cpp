@@ -30,9 +30,10 @@ extern "C" char *broadcast(const char *signal, const char *value) {
             ++i;
         }
     }
-    
-    if(i == 1) {
-        const char *data = returnValue.toStdString().c_str();
+
+    if(i == 1 && !returnValue.isEmpty()) {
+        std::string stdRet = returnValue.toStdString();
+        const char *data = stdRet.c_str();
         return strdup(data);
     }
     return NULL;
