@@ -1,0 +1,4 @@
+.qmake.stash
+Makefile
+moc_CommandExecutor.cpp
+moc_predefs.h
