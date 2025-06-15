@@ -45,6 +45,7 @@ public:
                 );
                 if(versionMetadata == NULL) {
                     qDebug() << "[xovi-message-broker]: Version undefined for simpleSignal" << cStrName;
+                    continue;
                 }
                 int version = versionMetadata->value.i;
                 // Found. Invoke.
