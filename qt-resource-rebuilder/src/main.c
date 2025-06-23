@@ -14,6 +14,7 @@
 #include "qmldiff.h"
 #include "../../util.h"
 #include "../xovi.h"
+#include "systemversion.h"
 
 /*
     ModificationDefinition are raw structures that come from the modification files
@@ -373,6 +374,8 @@ void _xovi_construct(){
     if(strcmp("1", env) != 0) {
         fatalErrorAbortEverything("QML_DISABLE_DISK_CACHE is not set correctly");
     }
+
+    setupSystemVersion();
 
     pthread_mutex_init(&mainMutex, NULL);
     loadAllModifications(&DEFINITIONS);
