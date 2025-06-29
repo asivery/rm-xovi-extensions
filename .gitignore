@@ -2,4 +2,8 @@
 **/*.o
 */xovi.c
 */xovi.h
+*/xovi.cpp
 **/*.so
+**/target
+**/.qmake.stash
+
