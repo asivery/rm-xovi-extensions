@@ -1,5 +1,5 @@
-makedirs = fileman palm-rejection qt-resource-rebuilder random-suspend-screen
-qmakedirs = qt-command-executor
+makedirs = fileman palm-rejection qt-resource-rebuilder random-suspend-screen framebuffer-spy webserver-remote
+qmakedirs = qt-command-executor xovi-message-broker
 alldirs = $(qmakedirs) $(makedirs)
 
 .PHONY	: all $(alldirs) clean clean-%
