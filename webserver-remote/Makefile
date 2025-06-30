@@ -22,7 +22,7 @@ librust_proxy.a:
 
 
 xovi.cpp xovi.h	&: $(name).xovi notification.qmd
-	python ${XOVI_REPO}/util/xovigen.py -o xovi.cpp -H xovi.h $(name).xovi
+	python3 ${XOVI_REPO}/util/xovigen.py -o xovi.cpp -H xovi.h $(name).xovi
 
 main.o	: xovi.h main.cpp
 

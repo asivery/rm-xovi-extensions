@@ -20,7 +20,7 @@ libqmldiff.a	:
 	cp qmldiff/target/${CARGO_BUILD_TARGET}/release/libqmldiff.a .
 
 xovi.c xovi.h	&: $(name).xovi
-	python ${XOVI_REPO}/util/xovigen.py -o xovi.c -H xovi.h $(name).xovi
+	python3 ${XOVI_REPO}/util/xovigen.py -o xovi.c -H xovi.h $(name).xovi
 
 main.o		: xovi.h types.h indexfile.h qmldiff.h ../util.h systemversion.h
 hash.o		: hash.h
