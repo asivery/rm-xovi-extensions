@@ -13,6 +13,7 @@ EOF
 
 cat << EOF > $XOVI_INSTALL_DIR/start
 mkdir -p /etc/systemd/system/xochitl.service.d
+mount -t tmpfs tmpfs /etc/systemd/system/xochitl.service.d
 cat << END > /etc/systemd/system/xochitl.service.d/xovi.conf
 [Service]
 Environment="QML_DISABLE_DISK_CACHE=1"
