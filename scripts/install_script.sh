@@ -100,7 +100,7 @@ fi
 
 # Checks if file was downloaded properly
 # Throws error and exits script
-if [ ! -f /home/root/xovi/xovi.so ]; then
+if [ ! -f $XOVI_INSTALL_DIR/xovi.so ]; then
     echo "\033[0;31m xovi.so not downloaded. Re-run the script while connected to WiFi \033[0m" 
     exit 1
 fi
