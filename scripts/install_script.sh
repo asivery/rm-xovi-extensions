@@ -98,6 +98,13 @@ else
 fi
 ./dlfile "https://github.com/asivery/xovi/releases/latest/download/$XOVI_FILE" xovi.so
 
+# Checks if file was downloaded properly
+# Throws error and exits script
+if [ ! -f /home/root/xovi/xovi.so ]; then
+    echo "\033[0;31m xovi.so not downloaded. Re-run the script while connected to WiFi \033[0m" 
+    exit 1
+fi
+
 echo "You're all set!"
 cd "$HOME"
 echo "Enter 'xovi/start' to start xovi!"
