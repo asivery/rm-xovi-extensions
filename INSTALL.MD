@@ -10,13 +10,13 @@ Please do not attempt to get xovi running on an encrypted tablet untethered by e
 
 ## To install XOVI:
 - Download [the extensions zip for your device](https://github.com/asivery/rmpp-xovi-extensions/releases)
-- Copy `install` over from the archive to the device, into `/tmp/`:
+- Copy `install-xovi-for-rm` over from the archive to the device, into `/tmp/`:
 ```
-scp install root@10.11.99.1:/tmp/
+scp install-xovi-for-rm root@10.11.99.1:/tmp/
 ```
-- Start the install script over SSH - on the device run: `chmod a+x /tmp/install && /tmp/install`
+- Start the install-xovi-for-rm script over SSH - on the device run: `chmod a+x /tmp/install-xovi-for-rm && /tmp/install-xovi-for-rm`
 
-Installing XOVI won't install any extensions. You need to choose what extensions you might need, and install them manually.
+Installing XOVI won't install any extensions. You need to choose what extensions you might need, and install them manually. **You do not need to install all extensions. Choose only the ones you want**
 
 ## To install extensions:
 - Before installing an extension, read its readme to make sure you also installed all of its dependencies. An extension without dependencies will either fail to load, or crash on startup.
