@@ -1,0 +1,8 @@
+version     0.1.0
+
+export      getFramebufferAddress
+import?     _ZN6QImageC1EPhiiiNS_6FormatEPFvPvES2_
+override    _ZN6QImageC1EPhiiiNS_6FormatEPFvPvES2_
+with
+    $argsize = 8
+end
