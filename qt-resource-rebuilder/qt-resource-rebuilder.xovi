@@ -1,4 +1,4 @@
-version 0.2.0
+version 0.3.0
 
 override _Z21qRegisterResourceDataiPKhS0_S0_
 import? _Z21qRegisterResourceDataiPKhS0_S0_
@@ -8,5 +8,7 @@ resource hashtabRules:rules.qrl
 
 ; Reach within qmldiff, and export
 export qmldiff_add_external_diff
+export qmldiff_disable_slots_while_processing
+export qmldiff_enable_slots_while_processing
 
 import fopen
