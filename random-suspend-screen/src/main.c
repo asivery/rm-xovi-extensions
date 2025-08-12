@@ -54,7 +54,6 @@ const char *nameRemap(const char *_name, const char *_mode, int _1, int _2){
 void _xovi_construct(){
     srand(time(NULL));
     ENV_ROOT = Environment->getExtensionDirectory(NAME);
-    Environment->requireExtension("fileman", 0, 1, 0);
     // If this directory does not exist, do not load anything.
     DIR *suspendRoot = opendir(ENV_ROOT);
     if(suspendRoot == NULL){

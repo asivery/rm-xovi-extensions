@@ -1,5 +1,8 @@
 version 0.1.0
 
+depends-on qt-resource-rebuilder:0.2.0
+depends-on xovi-message-broker:0.1.0
+
 import? _ZN17QNetworkInterface17interfaceFromNameERK7QString>QNetworkInterface
 import? _ZN10QTcpServer6listenERK12QHostAddresst
 import? _ZNK12QHostAddress8isGlobalEv>bool
