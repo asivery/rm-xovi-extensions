@@ -40,8 +40,7 @@ jobs:
             apt-get install -y zip curl
             export XOVI_REPO=/tmp/xovi
             git clone https://github.com/asivery/xovi $XOVI_REPO
-            . /opt/codex/*/*/environment-setup-*
-            make
+            bash -c ". /opt/codex/*/*/environment-setup-*; make"
             mkdir output
             find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
             curl -Lo dlfile ${{ matrix.dlfile_url }}
