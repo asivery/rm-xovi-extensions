@@ -34,4 +34,14 @@ extern "C" {
         qt_resource_rebuilder$qmldiff_add_external_diff(r$notification, "Notification for remote file access");
         start_proxy_server();
     }
+
+    char *get_all_ips_formatted() {
+        QString outStr;
+        for(auto &addr : QNetworkInterface::allAddresses()) {
+            if(!addr.isLoopback() && addr.protocol() == 0) {
+                outStr += "- http://" + addr.toString() + "\n";
+            }
+        }
+        return strdup(outStr.toStdString().c_str());
+    }
 }

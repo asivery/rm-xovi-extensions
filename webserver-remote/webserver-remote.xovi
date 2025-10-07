@@ -25,4 +25,10 @@ with
     xovi-message-broker$simpleSignal = "webserver-remote$allowAddress"
 end
 
+export get_all_ips_formatted
+with
+    xovi-message-broker$version = 1
+    xovi-message-broker$simpleSignal = "webserver-remote$getAllIPs"
+end
+
 resource notification:notification.qmd

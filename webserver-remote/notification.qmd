@@ -116,7 +116,28 @@ END AFFECT
 
 ; Break the settings' check.
 AFFECT [[12680323036303530631]]
-    TRAVERSE [[3819512207256720568]] > [[14125623155555875541]] > [[5542726367840701177]]#[[17318194766280080962]]
-        REPLACE [[254522926132630058]] WITH { readonly property bool ~&254522926132630058&~: ~&6504329801&~ }
+    IMPORT net.asivery.XoviMessageBroker 1.0
+    TRAVERSE [[3819512207256720568]]
+        LOCATE BEFORE ALL
+        INSERT {
+            XoviMessageBroker {
+                ~&5972374&~: xoviWebServerBroker
+                listeningFor: []
+            }
+        }
+        TRAVERSE [[14125623155555875541]] > [[5542726367840701177]]#[[17318194766280080962]]
+            REPLACE [[254522926132630058]] WITH { readonly property bool ~&254522926132630058&~: ~&6504329801&~ }
+            REPLACE [[478136262235079021]] WITH { ~&478136262235079021&~: "Access your device files in a web browser." }
+            LOCATE BEFORE ALL
+            TRAVERSE [[5867847087117778010]]
+                LOCATE BEFORE ALL INSERT {
+                    ~&5972374&~: attachmentObject
+                    property ~&197102514&~ ips: xoviWebServerBroker.sendSimpleSignal("webserver-remote$getAllIPs", "")
+                }
+                REPLACE [[233736549263054]] WITH {
+                    ~&233736549263054&~: "Connect to any of the following addresses to access the interface:\n" + attachmentObject.ips
+                }
+            END TRAVERSE
+        END TRAVERSE
     END TRAVERSE
 END AFFECT
