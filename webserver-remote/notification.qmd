@@ -125,11 +125,11 @@ AFFECT [[12680323036303530631]]
                 listeningFor: []
             }
         }
-        TRAVERSE [[14125623155555875541]] > [[5542726367840701177]]#[[17318194766280080962]]
-            REPLACE [[254522926132630058]] WITH { readonly property bool ~&254522926132630058&~: ~&6504329801&~ }
+        TRAVERSE [[14125623155555875541]] > [[425121728314878811.214599571833]]#[[17318194766280080962]]
+            REPLACE [[254522926132630058]] WITH { readonly property ~&6503679477&~ ~&254522926132630058&~: ~&6504329801&~ }
             REPLACE [[478136262235079021]] WITH { ~&478136262235079021&~: "Access your device files in a web browser." }
             LOCATE BEFORE ALL
-            TRAVERSE [[5867847087117778010]]
+            TRAVERSE [[425121728314878811.437183513164491482]]
                 LOCATE BEFORE ALL INSERT {
                     ~&5972374&~: attachmentObject
                     property ~&197102514&~ ips: xoviWebServerBroker.sendSimpleSignal("webserver-remote$getAllIPs", "")
