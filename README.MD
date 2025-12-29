@@ -19,6 +19,8 @@ XOVI is a tethered extension manager - after a restart, the tablet will get back
 
 Please do not attempt to get xovi running on an encrypted tablet untethered by editing the xochitl systemd files in the root partition!! You WILL end up with a bootlooping device, and have to go through manual recovery.
 
+If you'd like to be able to start XOVI without an external device, it is recommended that you install a separate XOVI starter, such as [xovi-tripletap](https://github.com/rmitchellscott/xovi-tripletap).
+
 ## To install XOVI:
 - Download [the extensions zip for your device](https://github.com/asivery/rmpp-xovi-extensions/releases)
 - Copy `install-xovi-for-rm` over from the archive to the device, into `/tmp/`:
