@@ -1,6 +1,6 @@
-# reMarkable XOVI extensions
+# rM XOVI extensions
 
-This is a monorepo for all my XOVI extensions for reMarkable tablets.
+This is a monorepo for all my XOVI extensions for rM tablets.
 
 Note: I call extensions which themselves do not add functionality, but are a dependency for
 other extensions 'modules'
