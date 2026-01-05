@@ -1,6 +1,6 @@
-# rMPP XOVI extensions
+# rM XOVI extensions
 
-This is a monorepo for all my XOVI extensions for the rMPP tablet.
+This is a monorepo for all my XOVI extensions for rM tablets.
 
 Note: I call extensions which themselves do not add functionality, but are a dependency for
 other extensions 'modules'
@@ -22,7 +22,7 @@ Please do not attempt to get xovi running on an encrypted tablet untethered by e
 If you'd like to be able to start XOVI without an external device, it is recommended that you install a separate XOVI starter, such as [xovi-tripletap](https://github.com/rmitchellscott/xovi-tripletap).
 
 ## To install XOVI:
-- Download [the extensions zip for your device](https://github.com/asivery/rmpp-xovi-extensions/releases)
+- Download [the extensions zip for your device](https://github.com/asivery/rm-xovi-extensions/releases)
 - Copy `install-xovi-for-rm` over from the archive to the device, into `/tmp/`:
 ```
 scp install-xovi-for-rm root@10.11.99.1:/tmp/
@@ -33,7 +33,7 @@ Installing XOVI won't install any extensions. You need to choose what extensions
 
 ## To install extensions:
 - Before installing an extension, read its readme to make sure you also installed all of its dependencies. An extension without dependencies will either fail to load, or crash on startup.
-- Download an extension's `.so` file (in case of this repository, [from the `extensions.zip` file](https://github.com/asivery/rmpp-xovi-extensions/releases/), then unpack it to get all the currently available xovi extensions)
+- Download an extension's `.so` file (in case of this repository, [from the `extensions.zip` file](https://github.com/asivery/rm-xovi-extensions/releases), then unpack it to get all the currently available xovi extensions)
 - Copy the `.so` file to `/home/root/xovi/extensions.d/` on the tablet
 - Run `systemctl restart xochitl` to restart xovi
 
@@ -42,13 +42,14 @@ If your device updates, or if you're installing qt-resource-rebuilder for the fi
 
 # Currently available extensions:
 
-- [fileman](fileman/) - A module for managing filesystem redirections
-- [random-suspend-screen](random-suspend-screen) - Lets you randomize your rM tablet's suspend screens
-- [qt-command-executor](qt-command-executor) - Injects a QT module, which makes it possible to execute shell commands from QML.
-- [qt-resource-rebuilder](qt-resource-rebuilder) - Injects itself into QT, and rebuilds resource databases on the fly. This makes it possible to replace or add QML files, images, etc...
 - [framebuffer-spy](framebuffer-spy) - A module for exposing the address of the system framebuffer
+- [qt-command-executor](qt-command-executor) - Injects a QT module, which makes it possible to execute shell commands from QML
+- [qt-resource-rebuilder](qt-resource-rebuilder) - Injects itself into QT, and rebuilds resource databases on the fly. This makes it possible to replace or add QML files, images, etc...
 - [webserver-remote](webserver-remote) - Exposes the USB webserver to all interfaces, and adds a confirmation dialog for any inbound connection to it
+- [xovi-message-broker](xovi-message-broker) - A module for mediating the transmission of simple packets between xovi extensions and QML
 
 # Deprecated:
 
+- [fileman](fileman) - A module for managing filesystem redirections
 - [palm-rejection](palm-rejection) - Disables the touchscreen whenever the marker is undocked
+- [random-suspend-screen](random-suspend-screen) - Lets you randomize your rM tablet's suspend screens
