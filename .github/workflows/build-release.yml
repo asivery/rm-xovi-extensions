@@ -13,11 +13,11 @@ jobs:
         include:
           - os: "eeems/remarkable-toolchain:latest-rmpp"
             arch: aarch64-unknown-linux-gnu
-            zip_name: xovi-aarch64.zip
+            zip_name: xovi-aarch64.tar.gz
             xovi_so_url: "https://github.com/asivery/xovi/releases/latest/download/xovi-aarch64.so"
           - os: "eeems/remarkable-toolchain:latest-rm2"
             arch: armv7-unknown-linux-gnueabihf
-            zip_name: xovi-arm32.zip
+            zip_name: xovi-arm32.tar.gz
             xovi_so_url: "https://github.com/asivery/xovi/releases/latest/download/xovi-arm32.so"
     runs-on: ubuntu-latest
 
@@ -37,21 +37,24 @@ jobs:
             . "$HOME/.cargo/env"
             rustup target add ${{ matrix.arch }}
             apt-get update
-            apt-get install -y zip curl
+            apt-get install -y curl
             export XOVI_REPO=/tmp/xovi
             git clone https://github.com/asivery/xovi $XOVI_REPO
             bash -c ". /opt/codex/*/*/environment-setup-*; make"
             mkdir -p output/xovi/inactive-extensions
             find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output/xovi/inactive-extensions \;
+            mkdir -p output/xovi/{extensions.d,exthome,scripts,services}
+            mkdir -p output/xovi/scripts/{debug,pre-start,post-start,pre-stock,post-stock}
+            mkdir -p output/xovi/services/xochitl.service
             cp -r xovi-setup/* output/xovi/
             cd output/xovi
             curl -Lo xovi.so ${{ matrix.xovi_so_url }}
+            mv inactive-extensions/qt-resource-rebuilder.so extensions.d/
             chmod a+x start debug stock rebuild_hashtable
             ln -s /home/root/xovi/extensions.d services/xochitl.service/extensions.d
             ln -s /home/root/xovi/exthome services/xochitl.service/exthome
-            mv inactive-extensions/qt-resource-rebuilder.so extensions.d
             cd ..
-            zip -r ../${{ matrix.zip_name }} *
+            tar -czf ../${{ matrix.zip_name }} *
 
         - name: Upload Build Artifact
           uses: actions/upload-artifact@v4
