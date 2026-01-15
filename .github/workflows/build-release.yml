@@ -31,6 +31,7 @@ jobs:
             submodules: true
 
         - name: Build Application
+          shell: bash
           run: |
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs > install
             sh install -y
@@ -42,7 +43,7 @@ jobs:
             git clone https://github.com/asivery/xovi $XOVI_REPO
             bash -c ". /opt/codex/*/*/environment-setup-*; make"
             mkdir -p output/xovi/inactive-extensions
-            find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output/xovi/inactive-extensions \;
+            find . -iname "*.so" -not -path "**/release/deps/**" -not -path "./output/xovi/inactive-extensions/*" -exec cp -v {} output/xovi/inactive-extensions/ \;
             mkdir -p output/xovi/{extensions.d,exthome,scripts,services}
             mkdir -p output/xovi/scripts/{debug,pre-start,post-start,pre-stock,post-stock}
             mkdir -p output/xovi/services/xochitl.service
