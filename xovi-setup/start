@@ -1,0 +1,43 @@
+#!/bin/bash
+
+shopt -s nullglob
+
+for script in /home/root/xovi/scripts/pre-start/*.sh; do
+    "$script"
+done
+
+restart_services=()
+
+for source_dir in /home/root/xovi/services/*/; do
+    unit=$(basename "$source_dir")
+
+    target_dir=/etc/systemd/system/$unit.d
+
+    mkdir -p "$target_dir"
+
+    umount -q "$target_dir"
+
+    mount -o bind "$source_dir" "$target_dir"
+
+    xovi_conf=$target_dir/xovi.conf
+
+    rm -f "$xovi_conf"
+
+    cat << EOF > "$xovi_conf"
+[Service]
+Environment="LD_PRELOAD=/home/root/xovi/xovi.so"
+Environment="XOVI_ROOT=$source_dir"
+EOF
+
+    restart_services+=("$unit")
+done
+
+systemctl daemon-reload
+
+for unit in "${restart_services[@]}"; do
+    systemctl restart "$unit"
+done
+
+for script in /home/root/xovi/scripts/post-start/*.sh; do
+    "$script"
+done
