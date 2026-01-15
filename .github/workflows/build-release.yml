@@ -13,12 +13,12 @@ jobs:
         include:
           - os: "eeems/remarkable-toolchain:latest-rmpp"
             arch: aarch64-unknown-linux-gnu
-            zip_name: extensions-aarch64.zip
-            dlfile_url: "https://github.com/asivery/dlfile/releases/latest/download/dlfile-aarch64"
+            zip_name: xovi-aarch64.zip
+            xovi_so_url: "https://github.com/asivery/xovi/releases/latest/download/xovi-aarch64.so"
           - os: "eeems/remarkable-toolchain:latest-rm2"
             arch: armv7-unknown-linux-gnueabihf
-            zip_name: extensions-arm32-testing.zip
-            dlfile_url: "https://github.com/asivery/dlfile/releases/latest/download/dlfile-armv7hf"
+            zip_name: xovi-arm32.zip
+            xovi_so_url: "https://github.com/asivery/xovi/releases/latest/download/xovi-arm32.so"
     runs-on: ubuntu-latest
 
     container:
@@ -41,14 +41,17 @@ jobs:
             export XOVI_REPO=/tmp/xovi
             git clone https://github.com/asivery/xovi $XOVI_REPO
             bash -c ". /opt/codex/*/*/environment-setup-*; make"
-            mkdir output
-            find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output \;
-            curl -Lo dlfile ${{ matrix.dlfile_url }}
-            gzip dlfile
-            cat scripts/install_script.sh dlfile.gz > output/install-xovi-for-rm
-            chmod a+x output/install-xovi-for-rm
-            cd output
-            zip ../${{ matrix.zip_name }} *
+            mkdir -p output/xovi/inactive-extensions
+            find . -iname "*.so" -not -path "**/release/deps/**" -exec cp -v {} output/xovi/inactive-extensions \;
+            cp -r xovi-setup/* output/xovi/
+            cd output/xovi
+            curl -Lo xovi.so ${{ matrix.xovi_so_url }}
+            chmod a+x start debug stock rebuild_hashtable
+            ln -s /home/root/xovi/extensions.d services/xochitl.service/extensions.d
+            ln -s /home/root/xovi/exthome services/xochitl.service/exthome
+            mv inactive-extensions/qt-resource-rebuilder.so extensions.d
+            cd ..
+            zip -r ../${{ matrix.zip_name }} *
 
         - name: Upload Build Artifact
           uses: actions/upload-artifact@v4
@@ -82,8 +85,8 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ steps.create_release_step.outputs.upload_url }}
-            asset_path: extensions-aarch64.zip/extensions-aarch64.zip
-            asset_name: extensions-aarch64.zip
+            asset_path: xovi-aarch64.zip/xovi-aarch64.zip
+            asset_name: xovi-aarch64.zip
             asset_content_type: application/octet-stream
 
         - name: Upload Release Assets (ARM32)
@@ -92,6 +95,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ steps.create_release_step.outputs.upload_url }}
-            asset_path: extensions-arm32-testing.zip/extensions-arm32-testing.zip
-            asset_name: extensions-arm32-testing.zip
+            asset_path: xovi-arm32.zip/xovi-arm32.zip
+            asset_name: xovi-arm32.zip
             asset_content_type: application/octet-stream
