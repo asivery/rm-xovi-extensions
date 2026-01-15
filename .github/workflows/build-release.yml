@@ -13,11 +13,11 @@ jobs:
         include:
           - os: "eeems/remarkable-toolchain:latest-rmpp"
             arch: aarch64-unknown-linux-gnu
-            zip_name: xovi-aarch64.tar.gz
+            tar_name: xovi-aarch64.tar.gz
             xovi_so_url: "https://github.com/asivery/xovi/releases/latest/download/xovi-aarch64.so"
           - os: "eeems/remarkable-toolchain:latest-rm2"
             arch: armv7-unknown-linux-gnueabihf
-            zip_name: xovi-arm32.tar.gz
+            tar_name: xovi-arm32.tar.gz
             xovi_so_url: "https://github.com/asivery/xovi/releases/latest/download/xovi-arm32.so"
     runs-on: ubuntu-latest
 
@@ -55,13 +55,13 @@ jobs:
             ln -s /home/root/xovi/extensions.d services/xochitl.service/extensions.d
             ln -s /home/root/xovi/exthome services/xochitl.service/exthome
             cd ..
-            tar -czf ../${{ matrix.zip_name }} *
+            tar -czf ../${{ matrix.tar_name }} *
 
         - name: Upload Build Artifact
           uses: actions/upload-artifact@v4
           with:
-            name: ${{ matrix.zip_name }}
-            path: ${{ matrix.zip_name }}
+            name: ${{ matrix.tar_name }}
+            path: ${{ matrix.tar_name }}
 
   release:
     runs-on: ubuntu-latest
@@ -89,8 +89,8 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ steps.create_release_step.outputs.upload_url }}
-            asset_path: xovi-aarch64.zip/xovi-aarch64.zip
-            asset_name: xovi-aarch64.zip
+            asset_path: xovi-aarch64.tar.gz/xovi-aarch64.tar.gz
+            asset_name: xovi-aarch64.tar.gz
             asset_content_type: application/octet-stream
 
         - name: Upload Release Assets (ARM32)
@@ -99,6 +99,6 @@ jobs:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
             upload_url: ${{ steps.create_release_step.outputs.upload_url }}
-            asset_path: xovi-arm32.zip/xovi-arm32.zip
-            asset_name: xovi-arm32.zip
+            asset_path: xovi-arm32.tar.gz/xovi-arm32.tar.gz
+            asset_name: xovi-arm32.tar.gz
             asset_content_type: application/octet-stream
