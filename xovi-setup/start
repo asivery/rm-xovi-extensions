@@ -19,7 +19,7 @@ for source_dir in /home/root/xovi/services/*/; do
 
     mount -o bind "$source_dir" "$target_dir"
 
-    xovi_conf=$target_dir/xovi.conf
+    xovi_conf=$target_dir/00-xovi.conf
 
     rm -f "$xovi_conf"
 
