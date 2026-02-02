@@ -33,57 +33,14 @@ recommended that you install a separate XOVI starter, such as
 
 # To install XOVI:
 
-## With curl
+## With vellum
 
-### Download curl
+- [Install vellum](https://github.com/vellum-dev/vellum-cli?tab=readme-ov-file#installation)
+- Install the `xovi` package:
 
-Everything should be run on the tablet.
-
-For rM1/rM2:
-
-```bash
-wget -O /home/root/curl --no-check-certificate \
-  https://github.com/moparisthebest/static-curl/releases/download/v8.11.0/curl-armv7 && \
-  echo "779a1bd9f486fd5ff1da25d5e5bb99c58bc79ded22344f2b7ff366cf645a6630  /home/root/curl" | \
-  sha256sum -c && chmod +x /home/root/curl
-```
-
-For rMPP/rMPPM:
-
-```bash
-wget -O /home/root/curl --no-check-certificate \
-  https://github.com/moparisthebest/static-curl/releases/download/v8.11.0/curl-aarch64 && \
-  echo "1b050abd1669f9a2ac29b34eb022cdeafb271dce5a4fb57d8ef8fadff6d7be1f  /home/root/curl" | \
-  sha256sum -c && chmod +x /home/root/curl
-```
-
-Output should end with `/home/root/curl: OK`.
-
-If the output ends with
-`sha256sum: WARNING: 1 of 1 computed checksums did NOT match`, follow the
-[manual method](#manually) instead.
-
-### Download the archive
-
-For rM1/rM2:
-
-```bash
-./curl -Lfo /tmp/xovi.tar.gz \
-  https://github.com/asivery/rm-xovi-extensions/releases/latest/download/xovi-arm32.tar.gz
-```
-
-For rMPP/rMPPM:
-
-```bash
-./curl -Lfo /tmp/xovi.tar.gz \
-  https://github.com/asivery/rm-xovi-extensions/releases/latest/download/xovi-aarch64.tar.gz
-```
-
-### Extract the archive
-
-```bash
-tar -xzvf /tmp/xovi.tar.gz -C /home/root
-```
+  ```bash
+  vellum add xovi
+  ```
 
 ## Manually
 
@@ -106,13 +63,23 @@ You're all set, use `xovi/start` to start xovi.
 
 To go back to stock either reboot, or run `xovi/stock`.
 
-Installing XOVI will install qt-resource-rebuilder by default. You can choose
+Installing XOVI manually will install qt-resource-rebuilder by default. You can choose
 what other extensions you might need, and install them manually. **You do not
 need to install all extensions. Choose only the ones you want.**
 
 If you plan on using UI mods, make sure to [update the hashtab](#to-update-hashtab-required-for-ui-mods).
 
 # To install extensions:
+
+## With vellum
+
+Dependencies are handles automatically.
+
+```bash
+vellum add <extension-name>
+```
+
+## Manually
 
 Before installing an extension, read its readme to make sure you also installed
 all of its dependencies. An extension without dependencies will either fail to
