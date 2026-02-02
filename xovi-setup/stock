@@ -14,7 +14,7 @@ for source_dir in /home/root/xovi/services/*/; do
     target_dir=/etc/systemd/system/$unit.d
 
     if [ -d "$target_dir" ]; then
-        rm -f "$target_dir/xovi.conf"
+        rm -f "$target_dir/00-xovi.conf"
 
         umount -q "$target_dir"
 
