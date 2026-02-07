@@ -8,6 +8,4 @@ for script in /home/root/xovi/scripts/debug/*.sh; do
     source "$script"
 done
 
-export LD_PRELOAD="/home/root/xovi/xovi.so"
-
-xochitl
+LD_PRELOAD="/home/root/xovi/xovi.so" xochitl
