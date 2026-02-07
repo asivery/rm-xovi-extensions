@@ -99,7 +99,7 @@ static void *pipeThread(void *) {
         cursor = 0;
         memset(commandBuffer, 0, MAX_COMMAND_SIZE);
         for(;;) {
-            int readBytes = read(inPipeReadFD, commandBuffer + cursor, MAX_COMMAND_SIZE);
+            int readBytes = read(inPipeReadFD, commandBuffer + cursor, MAX_COMMAND_SIZE - cursor);
             if(readBytes < 1) {
                 goto mainLoop;
             }
