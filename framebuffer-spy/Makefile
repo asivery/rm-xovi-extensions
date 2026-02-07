@@ -18,7 +18,7 @@ framebuffer-spy : $(objects)
 xovi.c xovi.h	&: $(xovifile).xovi
 	python3 ${XOVI_REPO}/util/xovigen.py -o xovi.c -H xovi.h $(xovifile).xovi
 
-main.o	: xovi.h src/main.c ../util.h
+main.o	: xovi.h src/main.c ../util.h framebuffer-spy.h
 
 .PHONY  : clean
 clean :

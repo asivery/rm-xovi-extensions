@@ -1,6 +1,7 @@
-version     0.1.0
+version     0.2.0
 
 export      getFramebufferAddress
+export      getFramebufferConfig
 import?     _ZN6QImageC1EPhiixNS_6FormatEPFvPvES2_
 override    _ZN6QImageC1EPhiixNS_6FormatEPFvPvES2_
 

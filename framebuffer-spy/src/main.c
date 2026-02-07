@@ -4,16 +4,20 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
 
 #include "../xovi.h"
+#include "../framebuffer-spy.h"
 
 static void *framebufferData = NULL;
+static struct FramebufferConfig config;
 
 void setFramebufferAddress(void *data) {
     fprintf(stderr, "Found framebuffer! Address is %p\n", data);
     framebufferData = data;
     char temp[50];
-    snprintf(temp, 50, "%p", framebufferData);
+    snprintf(temp, sizeof(temp), "%p", framebufferData);
     setenv("FRAMEBUFFER_SPY_EXTENSION_FBADDR", temp, 1);
 }
 
@@ -28,6 +32,10 @@ void override$_ZN6QImageC1EPhiiiNS_6FormatEPFvPvES2_(void *that, void *data, int
     bool rm2Condition = x == 1404 && y == 1872 && bpl == 2808 && f == 7;
     if((rmppmCondition || rmppCondition || rm2Condition) && framebufferData == NULL) {
         setFramebufferAddress(data);
+        config.width = x;
+        config.height = y;
+        config.type = f == 4 ? FBSPY_TYPE_RGBA : FBSPY_TYPE_RGB565;
+        config.requiresMSync = false;
     }
 #ifdef __aarch64__
     $_ZN6QImageC1EPhiixNS_6FormatEPFvPvES2_(that, data, x, y, bpl, f, a, b);
@@ -40,8 +48,11 @@ void *getFramebufferAddress(){
     return framebufferData;
 }
 
-void _xovi_construct() {
-    // Check if this is an rM1:
+struct FramebufferConfig getFramebufferConfig() {
+    return config;
+}
+
+static void prepareRM1() {
     int fd = open("/dev/fb0", O_RDONLY);
     if(fd != -1) {
         int sizeMap = 1872 * 1408 * 2;
@@ -49,5 +60,26 @@ void _xovi_construct() {
         void *data = mmap(NULL, sizeMap, PROT_READ, MAP_SHARED, fd, 0);
         setFramebufferAddress(data);
         setenv("FRAMEBUFFER_SPY_REQUIRE_MSYNC", "1", 1);
+        config.width = 1408;
+        config.height = 1872;
+        config.type = FBSPY_TYPE_RGB565;
+        config.requiresMSync = true;
     }
+}
+
+void _xovi_construct() {
+    // Check if this is an rM1:
+    char *data = malloc(1024);
+    int devFD = open("/sys/devices/soc0/machine", O_RDONLY);
+    if(devFD > -1) {
+        int r = read(devFD, data, 1023);
+        if(r > 0) {
+            data[r] = 0;
+            if(strstr(data, "reMarkable 1.0") != NULL || strstr(data, "reMarkable Prototype 1") != NULL) {
+                prepareRM1();
+            }
+        }
+        close(devFD);
+    }
+    free(data);
 }
