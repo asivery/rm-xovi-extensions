@@ -1,0 +1,29 @@
+#!/bin/bash
+
+shopt -s nullglob
+
+for script in /home/root/xovi/scripts/pre-stock/*.sh; do
+    "$script"
+done
+
+restart_services=()
+
+for source_dir in /home/root/xovi/services/*/; do
+    unit=$(basename "$source_dir")
+    target_dir=/etc/systemd/system/$unit.d
+
+    if [ -d "$target_dir" ]; then
+        umount -q "$target_dir"
+        restart_services+=("$unit")
+    fi
+done
+
+systemctl daemon-reload
+
+for unit in "${restart_services[@]}"; do
+    systemctl restart "$unit"
+done
+
+for script in /home/root/xovi/scripts/post-stock/*.sh; do
+    "$script"
+done

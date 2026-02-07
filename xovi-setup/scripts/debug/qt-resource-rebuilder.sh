@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export QML_DISABLE_DISK_CACHE=1
+export QML_XHR_ALLOW_FILE_WRITE=1
+export QML_XHR_ALLOW_FILE_READ=1

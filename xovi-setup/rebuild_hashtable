@@ -1,0 +1,48 @@
+#!/bin/bash
+
+if [[ ! -e '/home/root/xovi/extensions.d/qt-resource-rebuilder.so' ]]; then
+    echo "Please install qt-resource-rebuilder before updating the hashtable"
+    exit 1
+fi
+
+# stop systemwide gui process
+systemctl stop xochitl.service
+
+if pidof xochitl; then
+  kill -15 $(pidof xochitl)
+fi
+
+# make sure the resource-rebuilder folder exists.
+mkdir -p /home/root/xovi/exthome/qt-resource-rebuilder
+
+# remove the actual hashtable
+rm -f /home/root/xovi/exthome/qt-resource-rebuilder/hashtab
+
+# start update hashtab process
+echo -e "#################################"
+echo -e "Now we will run the GUI process with the arguments to build a new hashtable."
+echo -e "\n\t[...]"
+echo -e "\t[qmldiff] [Hashtab Rule Processor]: Hashed derived '...'"
+echo -e "\t[qmldiff]: Hashtab saved to /home/root/xovi/exthome/qt-resource-rebuilder/hashtab"
+echo -e "\nWhen we find this line in the output the process is stopped and the systemd service is started again."
+echo -e "\nPlease enter your password on the rM when prompted."
+read -p "Please press enter to continue:"
+
+echo -e "\n\nOutput:"
+sleep 3
+
+QMLDIFF_HASHTAB_CREATE=/home/root/xovi/exthome/qt-resource-rebuilder/hashtab QML_DISABLE_DISK_CACHE=1 LD_PRELOAD=/home/root/xovi/xovi.so /usr/bin/xochitl 2>&1 | while IFS= read line; do
+  echo -e "$line"
+  if [[ "$line" == "[qmldiff]: Hashtab saved to /home/root/xovi/exthome/qt-resource-rebuilder/hashtab" ]]; then
+    # yep, found the line we are wating for. exiting the process.
+    echo -e "\n##############"
+    echo -e "Found expected output. Killing gui process and restarting systemd service."
+    kill -15 $(pidof xochitl)
+  fi
+done
+
+# so, we seem to be finished.
+# wait another 5 seconds, then run the normal gui process via systemd
+sleep 5
+echo -e "Now starting the systemd xochitl service back up..."
+systemctl start xochitl.service
