@@ -13,7 +13,7 @@ QT += quick qml
 
 CONFIG += c++11
 
-SOURCES += src/main.cpp src/messagebroker.cpp xovi.cpp
+SOURCES += src/main.cpp src/pipes.cpp src/messagebroker.cpp xovi.cpp
 
 HEADERS += src/XoviMessageBroker.h
 

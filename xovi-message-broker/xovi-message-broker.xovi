@@ -1,3 +1,6 @@
-version 0.1.0
+version 0.2.0
+
+condition _ZNK3csl10devicelock10DeviceLock3setENS1_5StateE
 
 export broadcast
+export broadcastToNative

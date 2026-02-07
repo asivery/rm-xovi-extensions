@@ -4,10 +4,11 @@
 #include <QQmlApplicationEngine>
 #include <dlfcn.h>
 #include "XoviMessageBroker.h"
-
+#include "pipes.h"
 
 extern "C" void _xovi_construct(){
-    qmlRegisterType<XoviMessageBroker>("net.asivery.XoviMessageBroker", 1, 0, "XoviMessageBroker");
+    initializePipes();
+    qmlRegisterType<XoviMessageBroker>("net.asivery.XoviMessageBroker", 2, 0, "XoviMessageBroker");
 }
 
 extern "C" char _xovi_shouldLoad() {

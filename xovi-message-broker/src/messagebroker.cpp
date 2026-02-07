@@ -26,7 +26,17 @@ extern "C" char *broadcast(const char *signal, const char *value) {
     QString qSignal(signal), qValue(value);
     for(auto &ref : brokers) {
         if(ref->getListeningFor().contains(qSignal)) {
-            returnValue = ref->signalReceived(qSignal, qValue);
+            QVariant rawReturn;
+            QMetaObject::invokeMethod(
+                ref,
+                "onSignalReceived",
+                Qt::BlockingQueuedConnection,
+                Q_RETURN_ARG(QVariant, rawReturn),
+                Q_ARG(QVariant, qSignal),
+                Q_ARG(QVariant, qValue)
+            );
+            returnValue = rawReturn.toString();
+            qDebug() << "[xovi-message-broker] Response for" << qSignal << ":" << qValue << " is " << returnValue;
             ++i;
         }
     }
@@ -37,4 +47,35 @@ extern "C" char *broadcast(const char *signal, const char *value) {
         return strdup(data);
     }
     return NULL;
+}
+
+extern "C" char *broadcastToNative(const char *signal, const char *value, int *countOfHits) {
+    struct ExtensionMetadataIterator iter;
+    struct XoviMetadataEntry *entry;
+    Environment->createMetadataSearchingIterator(&iter, "xovi-message-broker$simpleSignal");
+    char *ret = NULL;
+    int i = 0;
+    while((entry = Environment->nextFunctionMetadataEntry(&iter))) {
+        if(strncmp(entry->value.s, signal, entry->value.sLength) == 0) {
+            struct XoviMetadataEntry *versionMetadata = Environment->getMetadataEntryForFunction(
+                iter.extensionName,
+                iter.functionName,
+                LP1_F_TYPE_EXPORT,
+                "xovi-message-broker$version"
+            );
+            if(versionMetadata == NULL) {
+                printf("[xovi-message-broker]: Version undefined for simpleSignal %s\n", signal);
+                continue;
+            }
+            int version = versionMetadata->value.i;
+            // Found. Invoke.
+            if(version == 1) {
+                if(ret != NULL) free(ret);
+                ret = ((char *(*)(const char *)) iter.functionAddress)(value);
+                ++i;
+            }
+        }
+    }
+    if(countOfHits) *countOfHits = i;
+    return ret;
 }

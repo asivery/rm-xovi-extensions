@@ -1,12 +1,12 @@
 AFFECT [[2328484894988065446]]
-    IMPORT net.asivery.XoviMessageBroker 1.0
+    IMPORT net.asivery.XoviMessageBroker 2.0
     TRAVERSE [[8397788359424131273]] > [[8397993708429497603]]#[[7713531976371484]] > [[8397993708429497603]]#[[7713694313857736]]
         LOCATE AFTER ALL
         INSERT {
             XoviMessageBroker {
                 id: xoviWebServerBroker
                 listeningFor: ["webserver-remote$newIP"]
-                onSignalReceived: (signal, message) => {
+                function onSignalReceived(signal, message) {
                     httpConnectionDialog.ip = message;
                     httpConnectionDialog.visible = true;
                 }
@@ -116,7 +116,7 @@ END AFFECT
 
 ; Break the settings' check.
 AFFECT [[12680323036303530631]]
-    IMPORT net.asivery.XoviMessageBroker 1.0
+    IMPORT net.asivery.XoviMessageBroker 2.0
     TRAVERSE [[3819512207256720568]]
         LOCATE BEFORE ALL
         INSERT {

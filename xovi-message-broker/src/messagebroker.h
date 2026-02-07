@@ -9,3 +9,4 @@ namespace messagebroker {
 
 // Xovi export
 extern "C" char *broadcast(const char *signal, const char *value);
+extern "C" char *broadcastToNative(const char *signal, const char *value, int *i);
