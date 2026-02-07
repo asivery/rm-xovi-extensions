@@ -15,7 +15,7 @@ for source_dir in /home/root/xovi/services/*/; do
     mkdir -p "$target_dir"
     umount -q "$target_dir"
     mount -t tmpfs tmpfs "$target_dir"
-    cp -rav "$source_dir/." "$target_dir"
+    cp -ra "$source_dir/." "$target_dir"
 
     cat << EOF > "$target_dir/00-xovi.conf"
 [Service]
