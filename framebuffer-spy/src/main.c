@@ -12,6 +12,7 @@
 
 static void *framebufferData = NULL;
 static struct FramebufferConfig config;
+static int sizeMap;
 
 void setFramebufferAddress(void *data) {
     fprintf(stderr, "Found framebuffer! Address is %p\n", data);
@@ -35,7 +36,8 @@ void override$_ZN6QImageC1EPhiiiNS_6FormatEPFvPvES2_(void *that, void *data, int
         config.width = x;
         config.height = y;
         config.type = f == 4 ? FBSPY_TYPE_RGBA : FBSPY_TYPE_RGB565;
-        config.requiresMSync = false;
+        config.bpl = bpl;
+        config.requiresReload = false;
     }
 #ifdef __aarch64__
     $_ZN6QImageC1EPhiixNS_6FormatEPFvPvES2_(that, data, x, y, bpl, f, a, b);
@@ -44,18 +46,27 @@ void override$_ZN6QImageC1EPhiiiNS_6FormatEPFvPvES2_(void *that, void *data, int
 #endif
 }
 
+// export
 void *getFramebufferAddress(){
     return framebufferData;
 }
 
+// export
 struct FramebufferConfig getFramebufferConfig() {
     return config;
+}
+
+// export
+void refreshFramebuffer() {
+    if(config.requiresReload) {
+        msync(framebufferData, sizeMap, MS_SYNC);
+    }
 }
 
 static void prepareRM1() {
     int fd = open("/dev/fb0", O_RDONLY);
     if(fd != -1) {
-        int sizeMap = 1872 * 1408 * 2;
+        sizeMap = 1872 * 1408 * 2;
         fprintf(stderr, "Framebuffer detected as a device file (fd=%d, size=%u) - mmaping...\n", fd, sizeMap);
         void *data = mmap(NULL, sizeMap, PROT_READ, MAP_SHARED, fd, 0);
         setFramebufferAddress(data);
@@ -63,7 +74,8 @@ static void prepareRM1() {
         config.width = 1408;
         config.height = 1872;
         config.type = FBSPY_TYPE_RGB565;
-        config.requiresMSync = true;
+        config.bpl = config.width * 2;
+        config.requiresReload = true;
     }
 }
 

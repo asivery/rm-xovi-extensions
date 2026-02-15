@@ -5,6 +5,6 @@
 #define FBSPY_TYPE_RGBA 2
 
 struct FramebufferConfig {
-    int width, height, type;
-    bool requiresMSync;
+    int width, height, type, bpl;
+    bool requiresReload;
 };
