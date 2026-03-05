@@ -5,6 +5,12 @@ export fopenToOpenFlags
 export anyFlagsToSyscall
 export anyFlagsToSimple
 override fopen
+with
+    $noLock = 1
+end
 override open
+with
+    $noLock = 1
+end
 import fopen
 import open
