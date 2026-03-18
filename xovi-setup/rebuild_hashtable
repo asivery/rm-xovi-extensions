@@ -36,13 +36,10 @@ QMLDIFF_HASHTAB_CREATE=/home/root/xovi/exthome/qt-resource-rebuilder/hashtab QML
   if [[ "$line" == "[qmldiff]: Hashtab saved to /home/root/xovi/exthome/qt-resource-rebuilder/hashtab" ]]; then
     # yep, found the line we are wating for. exiting the process.
     echo -e "\n##############"
-    echo -e "Found expected output. Killing gui process and restarting systemd service."
+    echo -e "Found expected output. Killing gui process."
     kill -15 $(pidof xochitl)
   fi
 done
 
-# so, we seem to be finished.
-# wait another 5 seconds, then run the normal gui process via systemd
-sleep 5
-echo -e "Now starting the systemd xochitl service back up..."
-systemctl start xochitl.service
+echo "Hashtab rebuilt. To start xovi, run xovi/start."
+
