@@ -1,8 +1,12 @@
-version     0.3.0
+version     0.2.0
 
-export      getFramebufferAddress
 export      getFramebufferConfig
 export      refreshFramebuffer
+export      getConfigString
+with
+    xovi-message-broker$simpleSignal = "framebuffer-spy$getConfigString"
+    xovi-message-broker$version = 1
+end
 import?     _ZN6QImageC1EPhiixNS_6FormatEPFvPvES2_
 override    _ZN6QImageC1EPhiixNS_6FormatEPFvPvES2_
 
