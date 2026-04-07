@@ -19,7 +19,7 @@ myself, and I'm sharing them in hopes that someone might also find them useful.
 
 You are installing this at your own risk.
 
-**DO NOT attempt to set up XOVI to start automatically boot.**
+**DO NOT attempt to set up XOVI to start automatically on boot.**
 
 XOVI is a tethered extension manager - after a restart, the tablet will get
 back to the stock OS. To get XOVI back, simply run `xovi/start` from the SSH
