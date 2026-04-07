@@ -19,11 +19,13 @@ myself, and I'm sharing them in hopes that someone might also find them useful.
 
 You are installing this at your own risk.
 
+**DO NOT attempt to set up XOVI to start automatically on boot.**
+
 XOVI is a tethered extension manager - after a restart, the tablet will get
 back to the stock OS. To get XOVI back, simply run `xovi/start` from the SSH
 prompt. Your tablet will restart, and you will get XOVI back.
 
-Please do not attempt to get xovi running on an encrypted tablet untethered by
+**This is by design.** Please do not attempt to get xovi running on an encrypted tablet untethered by
 editing the xochitl systemd files in the root partition!! You WILL end up with
 a bootlooping device, and have to go through manual recovery.
 
