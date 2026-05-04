@@ -1,45 +1,59 @@
 #!/bin/bash
+set -uo pipefail
 
-if [[ ! -e '/home/root/xovi/extensions.d/qt-resource-rebuilder.so' ]]; then
+export XOVI_ROOT="/tmp/xovi-hashtab"
+
+xovi=/home/root/xovi
+xovi_so="$xovi/xovi.so"
+qrr_so="$xovi/extensions.d/qt-resource-rebuilder.so"
+qrr_dir="$xovi/exthome/qt-resource-rebuilder"
+hashtab="$qrr_dir/hashtab"
+
+if [[ ! -f "$qrr_so" ]]; then
     echo "Please install qt-resource-rebuilder before updating the hashtable"
     exit 1
 fi
 
-# stop systemwide gui process
-systemctl stop xochitl.service
+systemctl stop xochitl
 
-if pidof xochitl; then
-  kill -15 $(pidof xochitl)
+if pid=$(pidof xochitl); then
+    kill -15 "$pid"
 fi
 
-# make sure the resource-rebuilder folder exists.
-mkdir -p /home/root/xovi/exthome/qt-resource-rebuilder
-
-# remove the actual hashtable
-rm -f /home/root/xovi/exthome/qt-resource-rebuilder/hashtab
-
-# start update hashtab process
 echo -e "#################################"
 echo -e "Now we will run the GUI process with the arguments to build a new hashtable."
 echo -e "\n\t[...]"
 echo -e "\t[qmldiff] [Hashtab Rule Processor]: Hashed derived '...'"
-echo -e "\t[qmldiff]: Hashtab saved to /home/root/xovi/exthome/qt-resource-rebuilder/hashtab"
+echo -e "\t[qmldiff]: Hashtab saved to $hashtab"
 echo -e "\nWhen we find this line in the output the process is stopped and the systemd service is started again."
 echo -e "\nPlease enter your password on the rM when prompted."
-read -p "Please press enter to continue:"
+read -rp "Please press enter to continue:"
+
+rm -rf "$XOVI_ROOT"
+mkdir -p "$XOVI_ROOT/extensions.d"
+ln -s "$qrr_so" "$XOVI_ROOT/extensions.d/"
+
+mkdir -p "$qrr_dir"
+rm -f "$hashtab"
 
 echo -e "\n\nOutput:"
+
 sleep 3
 
-QMLDIFF_HASHTAB_CREATE=/home/root/xovi/exthome/qt-resource-rebuilder/hashtab QML_DISABLE_DISK_CACHE=1 LD_PRELOAD=/home/root/xovi/xovi.so /usr/bin/xochitl 2>&1 | while IFS= read line; do
-  echo -e "$line"
-  if [[ "$line" == "[qmldiff]: Hashtab saved to /home/root/xovi/exthome/qt-resource-rebuilder/hashtab" ]]; then
-    # yep, found the line we are wating for. exiting the process.
+QMLDIFF_HASHTAB_CREATE="$hashtab" \
+QML_DISABLE_DISK_CACHE=1 \
+LD_PRELOAD="$xovi_so" \
+/usr/bin/xochitl 2>&1 | while IFS= read -r line; do
+    echo -e "$line"
+
+    [[ "$line" != "[qmldiff]: Hashtab saved to $hashtab" ]] && continue
+
     echo -e "\n##############"
     echo -e "Found expected output. Killing gui process."
-    kill -15 $(pidof xochitl)
-  fi
+
+    kill -15 "$(pidof xochitl)"
 done
 
-echo "Hashtab rebuilt. To start xovi, run xovi/start."
+rm -rf "$XOVI_ROOT"
 
+echo "Hashtab rebuilt. To start xovi, run xovi/start."
