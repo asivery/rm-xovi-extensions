@@ -41,8 +41,6 @@ echo
 echo "Output:"
 echo
 
-sleep 3
-
 QMLDIFF_HASHTAB_CREATE="$hashtab" \
 QML_DISABLE_DISK_CACHE=1 \
 LD_PRELOAD="$xovi_so" \
