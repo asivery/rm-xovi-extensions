@@ -25,7 +25,7 @@ echo "We will now run the GUI process to build a new hashtable."
 echo
 echo "    [qmldiff]: Hashtab saved to $hashtab"
 echo
-echo "When we find this line in the output, the process is finished."
+echo "When we find this line in the output, the process will be finished."
 echo
 echo "Please enter your password on the rM when prompted."
 read -rp "Please press enter to continue: "
