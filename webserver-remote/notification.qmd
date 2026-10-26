@@ -117,7 +117,7 @@ END AFFECT
 ; Break the settings' check.
 AFFECT [[12680323036303530631]]
     IMPORT net.asivery.XoviMessageBroker 2.0
-    TRAVERSE [[3819512207256720568]]
+    TRAVERSE [[6502786168]]#[[6504254477]]
         LOCATE BEFORE ALL
         INSERT {
             XoviMessageBroker {
